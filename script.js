@@ -1,28 +1,22 @@
-const chatbox = document.getElementById("chatbox");
-const input = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
+document.getElementById("sendBtn").addEventListener("click", envoyerMessage);
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") envoyerMessage();
+});
 
-function afficherMessage(expediteur, message) {
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("message");
-  messageElement.innerHTML = `<strong>${expediteur} :</strong> ${message}`;
-  chatbox.appendChild(messageElement);
+function afficherMessage(auteur, message) {
+  const chatbox = document.getElementById("chatbox");
+  const div = document.createElement("div");
+  div.innerHTML = `<strong>${auteur}:</strong> ${message}`;
+  chatbox.appendChild(div);
   chatbox.scrollTop = chatbox.scrollHeight;
 }
 
-sendBtn.addEventListener("click", envoyerMessage);
-input.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    envoyerMessage();
-  }
-});
-
 async function envoyerMessage() {
+  const input = document.getElementById("userInput");
   const message = input.value.trim();
   if (!message) return;
 
   afficherMessage("🧑‍🚀 Toi", message);
-  input.value = "";
 
   try {
     const response = await fetch("https://solitary-dream-a41b.abdoulwane26-8bc.workers.dev", {
@@ -30,7 +24,7 @@ async function envoyerMessage() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ message: message }) // ← très important
+      body: JSON.stringify({ message })
     });
 
     const data = await response.json();
@@ -38,10 +32,13 @@ async function envoyerMessage() {
     if (data.reply) {
       afficherMessage("🤖 ODRA", data.reply);
     } else {
-      afficherMessage("🤖 ODRA", "ODRA n'a pas pu répondre 🤖❌");
+      afficherMessage("🤖 ODRA", "Erreur de réponse d'ODRA 🤖❌");
     }
-  } catch (error) {
-    console.error("Erreur :", error);
+
+  } catch (e) {
     afficherMessage("🤖 ODRA", "Erreur de connexion avec ODRA 🤖❌");
+    console.error(e);
   }
+
+  input.value = "";
 }
