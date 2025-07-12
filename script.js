@@ -1,19 +1,7 @@
-document.getElementById("sendBtn").addEventListener("click", envoyerMessage);
-document.getElementById("userInput").addEventListener("keypress", function(e) {
-  if (e.key === "Enter") envoyerMessage();
-});
-
-function afficherMessage(auteur, message) {
-  const chatbox = document.getElementById("chatbox");
-  const div = document.createElement("div");
-  div.innerHTML = `<strong>${auteur}:</strong> ${message}`;
-  chatbox.appendChild(div);
-  chatbox.scrollTop = chatbox.scrollHeight;
-}
-
 async function envoyerMessage() {
   const input = document.getElementById("userInput");
   const message = input.value.trim();
+
   if (!message) return;
 
   afficherMessage("🧑‍🚀 Toi", message);
