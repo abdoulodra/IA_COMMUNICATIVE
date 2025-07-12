@@ -3,10 +3,10 @@ export default {
     try {
       const { message } = await request.json();
 
-      const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer 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",
+          "Authorization": "Bearer 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", // ← Mets ta vraie clé ici
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -14,22 +14,26 @@ export default {
           messages: [
             {
               role: "system",
-              content: "Tu es ODRA, une intelligence artificielle futuriste, gentille, drôle, qui adore discuter avec les humains."
+              content: "Tu es ODRA, une IA futuriste bienveillante et drôle, conçue pour discuter avec les humains de façon engageante et empathique."
             },
-            { role: "user", content: message }
+            {
+              role: "user",
+              content: message
+            }
           ]
         })
       });
 
-      const result = await openaiResponse.json();
-      const reply = result.choices?.[0]?.message?.content || "ODRA n'a pas pu générer de réponse.";
+      const data = await response.json();
+
+      const reply = data.choices?.[0]?.message?.content || "ODRA n'a pas compris 😶";
 
       return new Response(JSON.stringify({ reply }), {
         headers: { "Content-Type": "application/json" }
       });
 
-    } catch (err) {
-      return new Response(JSON.stringify({ reply: "Erreur côté serveur : " + err.message }), {
+    } catch (error) {
+      return new Response(JSON.stringify({ reply: 'Erreur serveur : ' + error.message }), {
         status: 500,
         headers: { "Content-Type": "application/json" }
       });
