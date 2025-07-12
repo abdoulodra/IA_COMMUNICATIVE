@@ -13,7 +13,8 @@ async function sendMessage() {
   appendMessage("🤖 ODRA", "⏳ réflexion...");
 
   try {
-    const response = await fetch("https://odra.openai-chat.workers.dev", {
+    const response = await fetch("https://solitary-dream-a41b.abdoulwane26-8bc.workers.dev/", {
+
       method: "POST",
       body: JSON.stringify({ message }),
       headers: { "Content-Type": "application/json" },
