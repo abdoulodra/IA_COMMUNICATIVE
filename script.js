@@ -1,3 +1,16 @@
+document.getElementById("sendBtn").addEventListener("click", envoyerMessage);
+document.getElementById("userInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") envoyerMessage();
+});
+
+function afficherMessage(auteur, message) {
+  const chatbox = document.getElementById("chatbox");
+  const msg = document.createElement("div");
+  msg.innerHTML = `<strong>${auteur}:</strong> ${message}`;
+  chatbox.appendChild(msg);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
 async function envoyerMessage() {
   const input = document.getElementById("userInput");
   const message = input.value.trim();
@@ -20,12 +33,10 @@ async function envoyerMessage() {
     if (data.reply) {
       afficherMessage("🤖 ODRA", data.reply);
     } else {
-      afficherMessage("🤖 ODRA", "Erreur de réponse d'ODRA 🤖❌");
+      afficherMessage("🤖 ODRA", "ODRA n'a pas compris 😶");
     }
-
-  } catch (e) {
+  } catch (error) {
     afficherMessage("🤖 ODRA", "Erreur de connexion avec ODRA 🤖❌");
-    console.error(e);
   }
 
   input.value = "";
